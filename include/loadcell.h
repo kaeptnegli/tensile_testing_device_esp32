@@ -1,6 +1,9 @@
-#pragma once
+#ifndef PM3_LOADCELL_H
+#define PM3_LOADCELL_H
 
 // Load cell module. The HX711 object lives privately in loadcell.cpp.
 
 // Configure and tare the load cell. Call once in setup().
 void loadCellBegin();
+
+#endif // PM3_LOADCELL_H

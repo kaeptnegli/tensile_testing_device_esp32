@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PM3_MACHINE_H
+#define PM3_MACHINE_H
+
 #include <stdint.h>
 
 // State machine states
@@ -24,3 +26,5 @@ struct MachineData {
   int64_t force         = 0;
   int64_t strain        = 0;
 };
+
+#endif // PM3_MACHINE_H

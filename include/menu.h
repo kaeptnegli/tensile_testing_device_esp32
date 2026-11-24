@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PM3_MENU_H
+#define PM3_MENU_H
+
 #include "machine.h"
 
 // LCD menu module.
@@ -21,3 +23,5 @@ void drawMenu(MenuState &ui,
               int modulusMenuCounter,
               int modulusMenuCounterTwo,
               bool redraw);
+
+#endif // PM3_MENU_H

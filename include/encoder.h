@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PM3_ENCODER_H
+#define PM3_ENCODER_H
 
 // Rotary encoder module.
 // All encoder state (counter, button flag, ...) lives as `static volatile`
@@ -17,3 +18,5 @@ void encoderClearButton();
 
 // Reset the counter to 0 (interrupts briefly disabled).
 void encoderReset();
+
+#endif // PM3_ENCODER_H
