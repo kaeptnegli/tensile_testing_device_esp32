@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PM3_PINS_H
+#define PM3_PINS_H
+
 #include <stdint.h>
 
 // Hardware configuration (pin numbers for the ESP32-C6)
@@ -31,3 +33,5 @@ constexpr uint8_t DIR_PIN     = 10; // C6: war 33
 
 // Misc
 constexpr float M_pif = 3.14159265358979323846f;
+
+#endif // PM3_PINS_H
