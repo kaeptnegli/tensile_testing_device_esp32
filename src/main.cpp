@@ -41,7 +41,7 @@ void setup() {
 
   loadCellBegin();
 
-  Wire.begin(I2C_SDA, I2C_SCL);  // C6: I2C-Pins explizit setzen
+  Wire.begin(I2C_SDA, I2C_SCL, 400000);  // C6: I2C-Pins explizit setzen
   menuBegin();
 
   encoderBegin();
