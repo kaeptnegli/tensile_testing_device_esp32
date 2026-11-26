@@ -63,6 +63,10 @@ void encoderRead(int &counts, bool &changed) {
   interrupts();
 }
 
+int encoderCounts() {
+  return rotaryCounts;
+}
+
 bool encoderButtonPressed() {
   return buttonPressed;
 }
