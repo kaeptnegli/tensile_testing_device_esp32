@@ -6,6 +6,7 @@
 #include "menu.h"
 #include "motion.h"
 #include "loadcell.h"
+#include "limitswitch.h"
 
 // Vocab:
 // ISR: Interruption Service Routine
@@ -13,7 +14,6 @@
 
 
 // TODO:
-// FIX drawMenu if else structure
 // Fix insert Probe State if else structure
 // Fix Rotary Encode button bounce
 
@@ -41,12 +41,17 @@ void setup() {
 
   loadCellBegin();
 
-  Wire.begin(I2C_SDA, I2C_SCL, 400000);  // C6: I2C-Pins explizit setzen
+  Wire.begin(I2C_SDA, I2C_SCL, 100000);  // C6: I2C-Pins explizit setzen
   menuBegin();
 
   encoderBegin();
 
-  motionBegin();
+  limitSwitchBegin();  // before motionBegin(): homing needs the switch
+
+  motionBegin(data.speed, data.acceleration);
+  if (!motionHome()) {
+    Serial.println("Homing failed: limit switch not found");  // motor stays disabled for moves
+  }
 }
 
 void loop() {
@@ -75,6 +80,7 @@ void loop() {
                 machineState = States::INSERT_PROBE;
                 ui.activeSubMenu = menuItem; // 1
                 ui.menuDepth++;
+		encoderReset();
                 break;
               }
             case 2: {
@@ -120,12 +126,14 @@ void loop() {
           } else {
             data.rodHeight += counts;
           }
+	  motionMoveToHeight(data.rodHeight);
           ui.displayWrite = true;
           encoderReset();
         }
 
         if (encoderButtonPressed() && ui.menuDepth < 3) {
           ui.menuDepth++;
+          encoderReset();  // every page starts with a fresh counter
           ui.displayWrite = true;
         } else if (encoderButtonPressed() && ui.menuDepth == 3) {
           Serial.println("case");
@@ -135,6 +143,8 @@ void loop() {
             data.probeReady = false;
           }
           machineState = States::MENU;
+	  encoderReset();
+          // rodHeight is kept: the motor stays where it is (specimen may be clamped)
           ui.activeSubMenu = -1;
           ui.menuDepth = 0;
           ui.displayWrite = true;
@@ -170,5 +180,12 @@ void loop() {
       }
   }
   // things need to be done every cycle after state machine
+  // read the counter again: the state machine may have reset it
+  counts = encoderCounts();
+  modulusMenuCounter = ((counts % 4) + 4) % 4;
+  modulusMenuCounterTwo = ((counts % 2) + 2) % 2;
+  // draw lcd menu
   drawMenu(ui, data, modulusMenuCounter, modulusMenuCounterTwo, redraw);
+  // run stepper
+  motionRun();
 }

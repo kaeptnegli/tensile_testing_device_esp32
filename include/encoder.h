@@ -12,6 +12,9 @@ void encoderBegin();
 // encoder moved since the last call in `changed` (the flag is cleared).
 void encoderRead(int &counts, bool &changed);
 
+// Current counter only, leaves the changed flag alone.
+int encoderCounts();
+
 // Button: set by the ISR, cleared by the caller once handled.
 bool encoderButtonPressed();
 void encoderClearButton();
